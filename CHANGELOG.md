@@ -9,4 +9,5 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Added accessible SVG bar and line chart renderer, HTML data table renderer, Heckbert NiceTicks calculator, WCAG 2.2 Contrast validator, Theme palette, and typed dataset Filters.
 - Initial project structure from the factory utility template.

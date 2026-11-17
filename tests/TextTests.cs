@@ -2,7 +2,7 @@ using Xunit;
 
 namespace Trysac.BlazorDashboardKit.Tests;
 
-/// <summary>Tests of the public API.</summary>
+/// <summary>Tests of the Text helper.</summary>
 public class TextTests
 {
     [Theory]
