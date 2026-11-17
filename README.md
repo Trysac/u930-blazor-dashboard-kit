@@ -1,45 +1,46 @@
-# blazor-dashboard-kit
+# Trysac.BlazorDashboardKit
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![CI](https://github.com/Trysac/u930-blazor-dashboard-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/Trysac/u930-blazor-dashboard-kit/actions/workflows/ci.yml)
+Teams building internal dashboards in Blazor often ship charts that screen readers ignore, colours that fail contrast, and meaningless axis ticks. This library provides a dependency-free, accessible SVG chart renderer that enforces WCAG 2.2 contrast, computes human-readable axis ticks, provides HTML table fallbacks, and filters datasets without JavaScript interop.
 
-Render dashboard bar and line charts as accessible SVG with WCAG 2.2 contrast checks, nice axis ticks, data table fallbacks and typed filters, ready for Blazor markup
+## Installation
 
-## Problem
-
-Describe in two or three sentences the concrete problem this utility solves, who hits it, and what
-they do today without it. Replace this paragraph when the first real feature lands.
-
-## Install
-
-NuGet package `Trysac.BlazorDashboardKit`. Until it is published to nuget.org, build it from a release
-tag with `dotnet pack src/Library.csproj`, then reference the package:
-
-```xml
-<PackageReference Include="Trysac.BlazorDashboardKit" Version="0.1.0" />
-```
-
-Requires .NET 10 or newer. No dependencies outside the base class library.
+Add the `Trysac.BlazorDashboardKit` NuGet package to your .NET 10+ project.
 
 ## Usage
 
 ```csharp
 using Trysac.BlazorDashboardKit;
 
-// Normalize trims surrounding whitespace and lower-cases the text.
-var name = Text.Normalize("  Hello World "); // "hello world"
-
-// Blank input is rejected explicitly instead of returning an empty string.
-Text.Normalize("   "); // throws BlankInputException ("input is blank")
+var spec = new ChartSpec(
+    Title: "Monthly sales",
+    Description: "Sales revenue for Q1 2026",
+    Categories: new[] { "Jan", "Feb", "Mar" },
+    Series: new[] { new Series("2026", new[] { 120.0, 80.0, 150.0 }) },
+    Kind: ChartKind.Bar);
+string svg = ChartRenderer.RenderSvg(spec);
 ```
 
-## Documentation
+## API Summary
 
-- [Architecture](docs/ARCHITECTURE.md) and [decisions](docs/decisions/)
-- [Testing](docs/TESTING.md) and [security](docs/SECURITY.md)
-- [Project record](docs/PROJECT.md) and [stack](docs/STACK.md)
-- [Changelog](CHANGELOG.md) and [contributing guide](CONTRIBUTING.md)
+- `ChartRenderer.RenderSvg(ChartSpec, Theme?)`: Renders an accessible `<svg>` element with `role="img"`, ARIA titles/descriptions, and data markers.
+- `ChartRenderer.RenderTable(ChartSpec)`: Renders an HTML `<table>` with appropriate row and column scopes.
+- `Contrast.Ratio(string, string)`: Calculates WCAG 2.2 contrast ratios between hex colors.
+- `NiceTicks.Compute(double, double, int)`: Generates human-readable axis tick values.
+- `Filters.Apply(IReadOnlyList<...>, IEnumerable<Filter>)`: Filters datasets with `Filter.Equal`, `Filter.Range`, and `Filter.In` predicates.
+- `DashboardException`: Thrown on validation errors (e.g., `invalid_color`, `low_contrast`, `too_many_series`, `too_many_points`, `invalid_id`).
 
-## License
+## Limits and Options
 
-[MIT](LICENSE) (c) 2026 Miguel Gomez
+- **Max Points**: 10,000 per chart.
+- **Max Series**: 5 per chart.
+- **Max Rows**: 10,000 for filter operations.
+- **Colors**: Must be `#RRGGBB` format.
+- **ID Prefix**: Must match `[a-z][a-z0-9-]{0,31}`.
+
+## Why not Chart.js or Recharts?
+
+Existing suites rely on large JavaScript interop packages, which often treat accessibility as an afterthought. This library generates deterministic, pure SVG server-side, ensuring compliance with accessibility standards by design rather than configuration.
+
+## Security
+
+See [docs/SECURITY.md](docs/SECURITY.md) for the threat model and input validation limits.

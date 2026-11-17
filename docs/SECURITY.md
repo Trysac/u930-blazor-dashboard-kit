@@ -1,27 +1,12 @@
-# Security notes
+# Security & Threat Model
 
-## Threat model
+## Defended Threats
 
-`Trysac.BlazorDashboardKit` is a pure library without I/O. The main risks are:
+- **XSS**: Every user-supplied text field (`Title`, `Description`, category labels, series names) is sanitized via `WebUtility.HtmlEncode` before being written into the SVG or HTML output.
+- **Input Injection**: `IdPrefix` fields are validated against the regular expression `^[a-z][a-z0-9-]{0,31}$`. Color strings are validated against `#RRGGBB` format using explicit hex byte parsing. Invalid inputs throw a `DashboardException`.
 
-- **Supply chain**: a compromised NuGet package, SDK or CI action. Mitigation: base class library
-  only, every package pinned to an exact version with a committed `packages.lock.json` restored in
-  locked mode, `dotnet list package --vulnerable` (the NuGet advisory database) and OSV-Scanner over
-  the lock files in the gates, Dependabot weekly updates, actions pinned by commit SHA, minimal
-  workflow permissions, the SDK pinned in `global.json`.
-- **Leaked secrets**: tokens committed by mistake. Mitigation: `gitleaks` runs in the local gates
-  and in CI; `.env` files are git-ignored.
-- **Insecure code**: command injection, unsafe deserialization, disabled TLS validation.
-  Mitigation: the .NET analyzers (`latest-recommended`, including the security rules) and nullable
-  warnings as errors, and the factory's Semgrep rules (`.semgrep/factory-rules.yml`, `nosemgrep`
-  ignored); fix the code instead of silencing it.
-- **Untrusted input**: callers may pass hostile strings. Mitigation: validate input and throw
-  explicit, documented exceptions; never deserialize untrusted bytes with `BinaryFormatter`;
-  never start a shell with untrusted data.
+## Limits
 
-## Publishing
-
-Releases are git tags; publishing to nuget.org needs an account and an API key, which are never
-stored in the repository.
-
-To report a vulnerability, see [SECURITY.md](../SECURITY.md).
+- **Data Volume**: `ChartRenderer` limits charts to `10,000` total data points (categories * series) and `5` series maximum. `Filters.Apply` limits operations to `10,000` rows. These limits prevent resource exhaustion.
+- **Tick Generation**: Tick count is strictly limited to `2..20`.
+- **Exception Length**: Error messages are truncated to 200 characters to prevent log flooding.

@@ -1,0 +1,8 @@
+[
+  { "month": "Jan", "region": "north", "channel": "direct", "amount": 120.0, "orders": 15 },
+  { "month": "Jan", "region": "south", "channel": "partner", "amount": 45.5, "orders": 8 },
+  { "month": "Feb", "region": "north", "channel": "direct", "amount": 80.0, "orders": 12 },
+  { "month": "Feb", "region": "west", "channel": "online", "amount": 5.0, "orders": 2 },
+  { "month": "Mar", "region": "south", "channel": "direct", "amount": 150.0, "orders": 19 },
+  { "month": "Mar", "region": "north", "channel": "partner", "amount": 95.25, "orders": 14 }
+]

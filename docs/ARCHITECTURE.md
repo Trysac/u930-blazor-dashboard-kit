@@ -1,31 +1,13 @@
 # Architecture
 
-## Purpose
+## Overview
 
-`Trysac.BlazorDashboardKit` is a small, dependency-free .NET library: Render dashboard bar and line charts as accessible SVG with WCAG 2.2 contrast checks, nice axis ticks, data table fallbacks and typed filters, ready for Blazor markup
+`Trysac.BlazorDashboardKit` is a dependency-free .NET class library designed for pure server-side rendering of accessible data visualizations. It provides deterministic SVG output that avoids JavaScript interop, making it ideal for Blazor markup bindings.
 
-## Shape
+## Core Modules
 
-```text
-caller code --> namespace Trysac.BlazorDashboardKit (src/)
-                    |
-                    +-- static classes with pure functions; no I/O, no global mutable state
-                    +-- internal helpers (optional)
-```
-
-- **Public API**: every `public` type and member of the assembly. `internal` types may change
-  without a major version.
-- **Errors**: invalid input throws an `ArgumentException` subclass of the library (such as
-  `BlankInputException`) documented with `<exception>`; null arguments throw
-  `ArgumentNullException`. The library never writes to the console or exits.
-- **Side effects**: none. If a feature needs I/O, accept a `Stream`, a `TextReader` or a small
-  interface instead of opening resources, and record the choice in an ADR.
-
-## Quality contract
-
-`scripts/Check/` is the single definition of the gates; `fabrica.json` tells the factory and CI how
-to run it. See [TESTING.md](TESTING.md).
-
-## Decisions
-
-Architecture decisions are recorded in [decisions/](decisions/) as numbered ADRs.
+- **Configuration**: `ChartSpec`, `Series`, `ChartKind`, and `Theme` records define the immutable state of a chart.
+- **Rendering**: `ChartRenderer` handles the logic for converting specs into deterministic SVG strings and HTML tables. It uses `0.##` number formatting with `CultureInfo.InvariantCulture`.
+- **Calculation**: `Contrast` computes WCAG 2.2 relative luminance; `NiceTicks` implements Heckbert's *Graphics Gems* (1990) algorithm.
+- **Data**: `Filters` and `Filter` evaluate typed predicates across collections of rows.
+- **Exceptions**: `DashboardException` encapsulates validation failures with stable machine-readable codes.

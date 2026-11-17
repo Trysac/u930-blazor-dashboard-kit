@@ -1,30 +1,22 @@
 using FsCheck;
+using FsCheck.Fluent;
 using FsCheck.Xunit;
 
 namespace Trysac.BlazorDashboardKit.Tests;
 
-/// <summary>Property tests (FsCheck) of the invariants of <see cref="Text.Normalize"/>.</summary>
+/// <summary>Property-based tests of <see cref="Text"/>.</summary>
 public class TextPropertiesTests
 {
     [Property]
-    public bool NormalizingTwiceChangesNothing(NonNull<string> input)
+    public Property NormalizeIsIdempotentOnNonBlankText(NonEmptyString raw)
     {
-        if (string.IsNullOrWhiteSpace(input.Get))
+        var trimmed = raw.Get.Trim();
+        if (trimmed.Length == 0)
         {
-            return true;
+            return true.ToProperty();
         }
-        var once = Text.Normalize(input.Get);
-        return once == Text.Normalize(once);
-    }
-
-    [Property]
-    public bool OutputHasNoSurroundingWhitespace(NonNull<string> input)
-    {
-        if (string.IsNullOrWhiteSpace(input.Get))
-        {
-            return true;
-        }
-        var output = Text.Normalize(input.Get);
-        return output == output.Trim();
+        var once = Text.Normalize(raw.Get);
+        var twice = Text.Normalize(once);
+        return (once == twice && once == once.Trim() && string.Equals(once, once.ToLowerInvariant(), StringComparison.Ordinal)).ToProperty();
     }
 }
