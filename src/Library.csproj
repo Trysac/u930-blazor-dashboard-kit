@@ -1,0 +1,24 @@
+<!-- Factory-owned file: agents must not edit it. Dependencies are added by the factory
+     (its scripts/AddDependency tool) at exact versions; shared settings live in
+     Directory.Build.props. -->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>Trysac.BlazorDashboardKit</AssemblyName>
+    <RootNamespace>Trysac.BlazorDashboardKit</RootNamespace>
+    <PackageId>Trysac.BlazorDashboardKit</PackageId>
+    <Version>0.1.0</Version>
+    <Description>Render dashboard bar and line charts as accessible SVG with WCAG 2.2 contrast checks, nice axis ticks, data table fallbacks and typed filters, ready for Blazor markup</Description>
+    <Authors>Miguel Gomez</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Trysac/u930-blazor-dashboard-kit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Trysac/u930-blazor-dashboard-kit</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+</Project>

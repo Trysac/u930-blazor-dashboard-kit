@@ -1,0 +1,16 @@
+# blazor-dashboard-kit
+
+> Render dashboard bar and line charts as accessible SVG with WCAG 2.2 contrast checks, nice axis ticks, data table fallbacks and typed filters, ready for Blazor markup NuGet package `Trysac.BlazorDashboardKit`, namespace `Trysac.BlazorDashboardKit`, MIT
+> licensed, .NET >= 10, base class library only.
+
+## Docs
+
+- [README](README.md): problem, install, usage example
+- [AGENTS](AGENTS.md): commands, folder map, conventions, limits
+- [Architecture](docs/ARCHITECTURE.md): shape of the library and its public API
+- [Testing](docs/TESTING.md): how to run and extend the tests
+
+## Optional
+
+- [Stack](docs/STACK.md): tools used and discarded
+- [Changelog](CHANGELOG.md): release history
